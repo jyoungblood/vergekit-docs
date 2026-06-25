@@ -1,0 +1,66 @@
+{
+  "menu": [
+    {
+      "type": "group",
+      "label": "Getting Started",
+      "items": [
+        {
+          "slug": "index",
+          "label": "Introduction",
+          "icon": "info",
+          "attrs": { "data-astro-prefetch": true }
+        },
+        {
+          "slug": "installation",
+          "label": "Installation",
+          "icon": "download",
+          "attrs": { "data-astro-prefetch": true }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "label": "Workflow",
+      "items": [
+        {
+          "slug": "core-concepts",
+          "label": "Core Concepts",
+          "icon": "route",
+          "attrs": { "data-astro-prefetch": true }
+        },
+        {
+          "slug": "deployment",
+          "label": "Deployment",
+          "icon": "rocket",
+          "attrs": { "data-astro-prefetch": true }
+        },
+        {
+          "type": "submenu",
+          "label": "Guides",
+          "icon": "blocks",
+          "open": true,
+          "items": [
+            {
+              "slug": "workflow/index",
+              "label": "Overview",
+              "icon": "map",
+              "attrs": { "data-astro-prefetch": true }
+            },
+            {
+              "slug": "workflow/customization",
+              "label": "Customization",
+              "icon": "slidersVertical",
+              "attrs": { "data-astro-prefetch": true }
+            },
+            {
+              "slug": "workflow/release-checklist",
+              "label": "Release Checklist",
+              "icon": "list-checks",
+              "attrs": { "data-astro-prefetch": true }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

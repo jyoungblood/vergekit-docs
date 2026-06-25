@@ -1,0 +1,414 @@
+---
+import "../styles/global.css";
+
+const featureCards = [
+  {
+    title: "Workers-native Astro",
+    body: "Astro runs in server mode through the Cloudflare Workers adapter, with strict TypeScript and server-first patterns.",
+  },
+  {
+    title: "D1 and Drizzle",
+    body: "A D1-first database layer uses Drizzle schema and migrations while keeping app code behind local database modules.",
+  },
+  {
+    title: "Auth flows included",
+    body: "Better Auth is wired for register, login, logout, email verification, forgot password, and reset password flows.",
+  },
+  {
+    title: "Email as a provider",
+    body: "Auth email can run through console, Cloudflare Email, Resend, Mailgun, or explicit Node SMTP usage.",
+  },
+];
+
+const includedGroups = [
+  {
+    label: "App base",
+    items: [
+      "Astro server app with strict TypeScript",
+      "Cloudflare Workers adapter",
+      "Tailwind CSS v4",
+      "Local Astro UI components",
+      "Lucide Astro icons",
+    ],
+  },
+  {
+    label: "Auth and routing",
+    items: [
+      "Better Auth with D1 storage",
+      "Email/password auth",
+      "Email verification and password reset",
+      "Middleware-authenticated Astro.locals",
+      "Route guards for protected pages and API routes",
+    ],
+  },
+  {
+    label: "Data and forms",
+    items: [
+      "D1 database binding named DB",
+      "Drizzle ORM and Drizzle Kit migrations",
+      "Zod request parsing",
+      "Astro Actions example",
+      "API response helpers",
+    ],
+  },
+  {
+    label: "Project checks",
+    items: [
+      "Vitest",
+      "happy-dom",
+      "oxlint",
+      "Prettier",
+      "npm run verify",
+    ],
+  },
+];
+
+const setupSteps = [
+  {
+    step: "01",
+    title: "Install dependencies",
+    command: "npm install",
+  },
+  {
+    step: "02",
+    title: "Create local vars",
+    command: "cp .dev.vars.example .dev.vars",
+  },
+  {
+    step: "03",
+    title: "Generate an auth secret",
+    command: "openssl rand -base64 32",
+  },
+  {
+    step: "04",
+    title: "Apply local D1 migrations",
+    command: "npm run db:migrate:local",
+  },
+  {
+    step: "05",
+    title: "Start the app",
+    command: "npm run dev",
+  },
+];
+
+const principles = [
+  {
+    title: "Use the stack",
+    body: "VK stays close to Astro, Cloudflare, Drizzle, Better Auth, and Tailwind instead of adding a large custom framework layer.",
+  },
+  {
+    title: "D1 first",
+    body: "D1 is the supported runtime database. PostgreSQL and MySQL are proof targets only in this release.",
+  },
+  {
+    title: "Server first",
+    body: "Auth, database writes, email, and validation stay on the server. Client JavaScript is used only for specific interactions.",
+  },
+  {
+    title: "Validate at the boundary",
+    body: "Zod validation stays close to the route or action that receives external data.",
+  },
+];
+
+const notIncluded = [
+  "Admin UI",
+  "RBAC",
+  "Uploads and storage adapters",
+  "Media processing",
+  "CLI installer",
+  "Production PostgreSQL or MySQL runtime support",
+];
+---
+
+<style>
+  body {
+    background-color: #b4b4b4;
+    color: #262626;
+  }
+</style>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="VergeKit is a small Astro application boilerplate for Cloudflare Workers with D1, Drizzle, Better Auth, email, validation, middleware, and Tailwind already wired."
+    />
+    <title>VergeKit - Web App Starter Kit for Cloudflare Workers</title>
+  </head>
+  <body>
+    <div class="min-h-screen overflow-hidden">
+      <header
+        class="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 sm:px-8 lg:px-10"
+      >
+        <a href="#" class="text-xl font-bold">VergeKit</a>
+        <nav
+          aria-label="Primary"
+          class="hidden items-center gap-7 text-sm font-medium text-[#262626]/75 md:flex"
+        >
+          <a class="hover:text-[#262626]" href="#included">Included</a>
+          <a class="hover:text-[#262626]" href="#shape">Shape</a>
+          <a class="hover:text-[#262626]" href="#install">Install</a>
+          <a class="hover:text-[#262626]" href="#limits">Limits</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="mx-auto max-w-7xl px-5 pb-16 pt-10 sm:px-8 lg:px-10 lg:pb-24">
+          <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.78fr)] lg:items-end">
+            <div class="max-w-4xl">
+              <p class="mb-8 text-sm font-semibold uppercase text-[#262626]/70">
+                Astro + Cloudflare Workers starter
+              </p>
+              <h1
+                class="max-w-5xl text-6xl font-bold leading-none sm:text-7xl lg:text-8xl"
+              >
+                Astro app boilerplate for Cloudflare Workers.
+              </h1>
+              <p class="mt-8 max-w-3xl text-xl leading-8 text-[#262626]/78 sm:text-2xl sm:leading-9">
+                VK gives you a small, typed application base with D1, Drizzle,
+                Better Auth, email, validation, middleware, and Tailwind already wired.
+              </p>
+              <div class="mt-10 flex flex-col gap-3 sm:flex-row">
+                <a
+                  href="#install"
+                  class="inline-flex min-h-12 items-center justify-center border border-[#262626] bg-[#262626] px-5 text-sm font-bold text-[#f3f0e7] transition hover:bg-[#1b1b1b]"
+                >
+                  Get started
+                </a>
+                <a
+                  href="#included"
+                  class="inline-flex min-h-12 items-center justify-center border border-[#262626]/35 px-5 text-sm font-bold text-[#262626] transition hover:border-[#262626]"
+                >
+                  Read the docs
+                </a>
+              </div>
+            </div>
+
+            <aside
+              aria-label="Project preview"
+              class="border border-[#262626] bg-[#262626] p-4 text-[#f1eee7] shadow-[12px_12px_0_#8d8d8d]"
+            >
+              <div class="mb-5 flex items-center justify-between border-b border-[#f1eee7]/20 pb-3">
+                <span class="text-sm font-bold">vk</span>
+                <span class="text-xs text-[#f1eee7]/60">server app base</span>
+              </div>
+              <div class="grid gap-3 text-sm">
+                <div class="flex items-center justify-between bg-[#f1eee7] px-3 py-2 text-[#262626]">
+                  <span>D1 runtime database</span>
+                  <span class="font-bold">wired</span>
+                </div>
+                <div class="flex items-center justify-between border border-[#f1eee7]/25 px-3 py-2">
+                  <span>Better Auth flows</span>
+                  <span class="text-[#f1eee7]/65">ready</span>
+                </div>
+                <div class="flex items-center justify-between border border-[#f1eee7]/25 px-3 py-2">
+                  <span>Email providers</span>
+                  <span class="text-[#f1eee7]/65">5</span>
+                </div>
+              </div>
+              <pre class="mt-6 overflow-x-auto text-xs leading-6 text-[#f1eee7]/78"><code>src/
+  actions/       Astro Actions
+  auth/          Better Auth setup
+  components/    local Astro UI
+  db/            Drizzle schema
+  email/         providers + templates
+  lib/http/      JSON and Zod helpers
+  pages/         pages and API routes
+  middleware.ts  auth locals</code></pre>
+            </aside>
+          </div>
+        </section>
+
+        <section class="border-y border-[#262626]/20 bg-[#c0c0c0]">
+          <div
+            class="mx-auto grid max-w-7xl grid-cols-2 gap-px bg-[#262626]/20 px-5 sm:grid-cols-4 sm:px-8 lg:px-10"
+          >
+            {["Astro", "D1", "Drizzle", "Better Auth"].map((item) => (
+              <div class="bg-[#c0c0c0] py-6 text-center text-sm font-bold uppercase">
+                {item}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="included" class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+          <div class="grid gap-10 lg:grid-cols-[0.65fr_1fr]">
+            <div>
+              <p class="mb-4 text-sm font-semibold uppercase text-[#262626]/64">What it is</p>
+              <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                A small base for real full-stack apps.
+              </h2>
+              <p class="mt-6 text-lg leading-8 text-[#262626]/75">
+                The goal is not to be a framework. The goal is to be a clean
+                starting point that uses the platform and the stack directly.
+              </p>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              {featureCards.map((card) => (
+                <article class="border border-[#262626]/30 bg-[#bdbdbd] p-5">
+                  <h3 class="text-xl font-bold">{card.title}</h3>
+                  <p class="mt-3 leading-7 text-[#262626]/72">{card.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-[#262626] text-[#f1eee7]">
+          <div class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+            <div class="max-w-3xl">
+              <p class="mb-4 text-sm font-semibold uppercase text-[#f1eee7]/60">Included</p>
+              <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                The pieces most full-stack apps need, already connected.
+              </h2>
+            </div>
+            <div class="mt-12 grid gap-px bg-[#f1eee7]/20 md:grid-cols-2 lg:grid-cols-4">
+              {includedGroups.map((group) => (
+                <article class="bg-[#262626] p-6">
+                  <h3 class="text-lg font-bold">{group.label}</h3>
+                  <ul class="mt-6 space-y-4 text-sm leading-6 text-[#f1eee7]/74">
+                    {group.items.map((item) => (
+                      <li class="flex gap-3">
+                        <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-[#f1eee7]"></span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="shape" class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+          <div class="grid gap-10 lg:grid-cols-[1fr_0.82fr] lg:items-start">
+            <div>
+              <p class="mb-4 text-sm font-semibold uppercase text-[#262626]/64">Core concepts</p>
+              <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                Thin boundaries around the platform.
+              </h2>
+              <div class="mt-10 grid gap-4 sm:grid-cols-2">
+                {principles.map((principle) => (
+                  <article class="border-t border-[#262626] pt-5">
+                    <h3 class="text-xl font-bold">{principle.title}</h3>
+                    <p class="mt-3 leading-7 text-[#262626]/72">{principle.body}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+            <div class="border border-[#262626]/35 bg-[#c8c8c8] p-5">
+              <h3 class="text-sm font-bold uppercase text-[#262626]/65">Runtime position</h3>
+              <p class="mt-5 text-3xl font-bold leading-tight">
+                D1 is the only supported runtime database.
+              </p>
+              <p class="mt-5 leading-7 text-[#262626]/74">
+                App code should use local src/db modules instead of importing a
+                Drizzle dialect directly in routes, actions, or UI code.
+              </p>
+              <div class="mt-8 grid gap-3 text-sm font-semibold">
+                <div class="flex items-center justify-between border border-[#262626]/25 px-3 py-3">
+                  <span>Runtime</span>
+                  <span>D1</span>
+                </div>
+                <div class="flex items-center justify-between border border-[#262626]/25 px-3 py-3">
+                  <span>Future proof tests</span>
+                  <span>Hyperdrive</span>
+                </div>
+                <div class="flex items-center justify-between border border-[#262626]/25 px-3 py-3">
+                  <span>App query call sites</span>
+                  <span>src/db</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="install" class="border-y border-[#262626]/20 bg-[#d3cdc1]">
+          <div class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+            <div class="grid gap-10 lg:grid-cols-[0.52fr_1fr]">
+              <div>
+                <p class="mb-4 text-sm font-semibold uppercase text-[#262626]/64">Quickstart</p>
+                <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                  From install to local app.
+                </h2>
+                <p class="mt-6 text-lg leading-8 text-[#262626]/75">
+                  Install dependencies, create local runtime variables, generate
+                  a Better Auth secret, apply D1 migrations, and start the Astro dev server.
+                </p>
+              </div>
+              <ol class="grid gap-3">
+                {setupSteps.map((item) => (
+                  <li class="grid gap-4 border border-[#262626]/28 bg-[#d9d3c8] p-4 sm:grid-cols-[4rem_1fr] sm:items-center">
+                    <span class="text-sm font-bold text-[#262626]/58">{item.step}</span>
+                    <div>
+                      <h3 class="font-bold">{item.title}</h3>
+                      <code class="mt-2 block overflow-x-auto bg-[#262626] px-3 py-2 text-sm text-[#f1eee7]">
+                        {item.command}
+                      </code>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        </section>
+
+        <section class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+          <div class="grid gap-10 lg:grid-cols-2">
+            <div>
+              <p class="mb-4 text-sm font-semibold uppercase text-[#262626]/64">Deployment</p>
+              <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                Built for the normal Cloudflare workflow.
+              </h2>
+              <p class="mt-6 text-lg leading-8 text-[#262626]/75">
+                Create D1, set Better Auth secrets, configure email, apply remote
+                migrations, run verification, then build and deploy with Wrangler.
+              </p>
+            </div>
+            <div class="grid gap-px bg-[#262626]/25 text-sm font-semibold sm:grid-cols-2">
+              {["npx wrangler d1 create vk", "npx wrangler secret put BETTER_AUTH_SECRET", "npm run db:migrate:remote", "npm run build", "npx wrangler deploy"].map((command) => (
+                <div class="bg-[#b4b4b4] p-5">
+                  <code>{command}</code>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="limits" class="border-t border-[#262626]/20 bg-[#c0c0c0]">
+          <div class="mx-auto max-w-7xl px-5 py-18 sm:px-8 lg:px-10 lg:py-24">
+            <div class="grid gap-10 lg:grid-cols-[0.72fr_1fr]">
+              <div>
+                <p class="mb-4 text-sm font-semibold uppercase text-[#262626]/64">Scope</p>
+                <h2 class="text-4xl font-bold leading-tight sm:text-5xl">
+                  The boilerplate stays intentionally small.
+                </h2>
+                <p class="mt-6 text-lg leading-8 text-[#262626]/75">
+                  VK includes the app foundation. It leaves larger product
+                  features out until an application actually needs them.
+                </p>
+              </div>
+              <div class="grid gap-3 sm:grid-cols-2">
+                {notIncluded.map((item) => (
+                  <div class="border border-[#262626]/28 px-4 py-4 text-lg font-bold">
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-[#262626]/65 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-10">
+        <p>VergeKit is a small Astro application boilerplate for Cloudflare Workers.</p>
+        <a class="font-bold text-[#262626]" href="#">Back to top</a>
+      </footer>
+    </div>
+  </body>
+</html>

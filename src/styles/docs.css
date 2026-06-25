@@ -1,0 +1,9 @@
+@import "tailwindcss";
+@import "basecoat-css/base";
+@import "basecoat-css/styles/vega";
+@import "reallysimpledocs/css";
+@import "reallysimpledocs/css/styles/vega";
+
+@source "../**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}";
+@source "../../docs/**/*.{md,mdx}";
+@source "../../node_modules/reallysimpledocs/src/runtime/**/*.{astro,js,ts}";
