@@ -16,13 +16,17 @@ Better Auth, and Tailwind instead of adding a large custom framework layer.
 - Drizzle schema and migrations.
 - Better Auth with email/password, email verification, reset password, and D1
   storage.
+- Better Auth admin plugin roles for `admin`, `moderator`, `user`, and
+  `banned`.
 - Register, login, logout, email verification, forgot password, and reset
   password flows.
 - Middleware that loads auth state into typed `Astro.locals`.
 - Public-by-default route auth with opt-in protected pages and APIs.
+- Custom 404 and 500 error pages.
 - API response helpers.
 - Zod request parsing.
 - Astro Actions example.
+- CSRF origin checks through Astro config.
 - Email providers for console, Cloudflare Email, Resend, Mailgun, and explicit
   Node SMTP usage.
 - Auth email templates with `@backstro/email`.
@@ -43,7 +47,7 @@ npm install
 Local development uses `.dev.vars` for local secrets, `wrangler.jsonc` for
 committed non-secret Worker configuration, and Wrangler secrets for deployed
 secret values. Apply D1 migrations before running auth flows, then optionally
-create a verified admin user with `npm run init:admin`.
+create a verified user with the `admin` role with `npm run init:admin`.
 
 ## Runtime Shape
 
@@ -52,6 +56,7 @@ src/
   actions/       Astro Actions
   auth/          Better Auth setup and route rules
   components/    local Astro UI components
+  config/        source-level app and auth policy
   db/            Drizzle schema, clients, and query seams
   email/         providers and auth email templates
   lib/http/      JSON and Zod parsing helpers
@@ -62,7 +67,7 @@ src/
 ## Not Included Yet
 
 - Admin UI.
-- RBAC.
+- Full RBAC admin UI.
 - Uploads and storage adapters.
 - Media processing.
 - Production PostgreSQL or MySQL runtime support.

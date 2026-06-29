@@ -7,27 +7,23 @@ surface area.
 
 ## Branding
 
-Set the application name in `wrangler.jsonc`:
+Set the application name in `src/config/app.ts`:
 
-```jsonc
-{
-  "vars": {
-    "APP_NAME": "Acme",
-  },
-}
+```ts
+export const appConfig = {
+  name: 'Acme',
+  defaultAuthenticatedPath: '/dashboard',
+} as const;
 ```
 
-Use the same value in deployed environment `vars` blocks if you use named
-Wrangler environments.
+## Configuration
 
-## Runtime Configuration
-
-Non-secret defaults belong in `wrangler.jsonc`; local secrets belong in
+Source-level app defaults and auth policy belong in `src/config`. Non-secret
+Worker runtime values belong in `wrangler.jsonc`; local secrets belong in
 `.dev.vars`; deployed secrets belong in Wrangler secrets.
 
 Common values to customize:
 
-- `APP_NAME`
 - `BETTER_AUTH_URL`
 - `EMAIL_PROVIDER`
 - `EMAIL_FROM`
@@ -39,18 +35,28 @@ Do not put `BETTER_AUTH_SECRET`, email API keys, or Cloudflare API tokens in
 
 ## Auth Routes
 
-Add globally protected pages and API namespaces in `src/auth/routes.ts`.
+Add globally protected pages and API namespaces in `src/config/auth.ts`.
 
 Use exact paths for individual pages:
 
 ```ts
-const protectedExactPaths = new Set(['/dashboard', '/account']);
+export const authRouteConfig = {
+  protectedExactPaths: ['/dashboard', '/account'],
+  protectedPrefixes: [],
+  // ...
+} as const;
 ```
 
 Use slash-terminated prefixes for route groups:
 
 ```ts
-const protectedPrefixes: string[] = ['/settings/', '/admin/'];
+export const authRouteConfig = {
+  protectedExactPaths: ['/dashboard'],
+  protectedPrefixes: ['/settings/'],
+  adminExactPaths: ['/admin'],
+  adminPrefixes: ['/admin/'],
+  // ...
+} as const;
 ```
 
 Use route-local checks when the route needs custom behavior, such as returning

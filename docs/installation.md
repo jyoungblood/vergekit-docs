@@ -73,7 +73,7 @@ Regenerate migrations after schema changes:
 npm run db:generate
 ```
 
-Optionally create a verified local admin user after migrations:
+Optionally create a verified local user with the `admin` role after migrations:
 
 ```bash
 npm run init:admin
@@ -87,11 +87,17 @@ notes, and alternate local or Cloudflare-hosted development database options.
 ## Auth Routes
 
 All routes are public until they opt into auth. Add protected exact paths or URL
-prefixes in `src/auth/routes.ts`, or check `Astro.locals.isAuthenticated` inside
+prefixes in `src/config/auth.ts`, or check `Astro.locals.isAuthenticated` inside
 a specific page or route handler.
 
 See [Route Authentication](/docs/setup/auth-routes) for middleware-protected and
 route-local examples.
+
+Better Auth plugins are configured in `src/auth/server.ts` and
+`src/auth/client.ts`. The admin plugin is already installed and configured for
+the app role model. See [Route Authentication](/docs/setup/auth-routes) for the
+plugin files that usually need to change when adding or modifying Better Auth
+plugins.
 
 ## Email
 
@@ -125,6 +131,14 @@ Cloudflare Email uses the `EMAIL` binding from `wrangler.jsonc`.
 
 See [Email Sending](/docs/setup/email) for direct send examples, provider
 requirements, auth-email helpers, and testing notes.
+
+## Configuration
+
+Editable app defaults and auth policy live in `src/config`. Runtime Worker
+values live in `wrangler.jsonc` vars. Local secrets live in `.dev.vars`, and
+deployed secrets live in Wrangler secrets.
+
+See [Configuration Guide](/docs/setup/runtime-configuration) for the full split.
 
 ## Run
 

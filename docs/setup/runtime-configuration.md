@@ -1,102 +1,65 @@
-# Runtime Configuration
+# Configuration Guide
 
-Verge Kit separates committed runtime defaults, local secrets, and deployed
-secrets. Keep that boundary clear so local development, CI, and Cloudflare
-Workers deployments behave the same way without leaking credentials.
+Configuration is split by responsibility so project-specific edits stay small
+and secrets stay out of the repo.
 
-## Committed Worker Variables
+## What Goes Where
 
-Use `wrangler.jsonc` as the committed source of truth for non-secret app-level
-Worker variables:
+| Location | Use for | Examples |
+| --- | --- | --- |
+| `src/config/*.ts` | Source-level defaults and policies that app code imports. These are committed and typed. | App name, default authenticated path, protected routes, app roles, permission values. |
+| `wrangler.jsonc` `vars` | Committed, non-secret Worker runtime values that can differ by deployed environment. | `EMAIL_PROVIDER`, `EMAIL_FROM`, `EMAIL_REPLY_TO`, `BETTER_AUTH_URL`, `MAILGUN_DOMAIN`. |
+| `.dev.vars` | Local-only secrets and local-only overrides. Never commit this file. | `BETTER_AUTH_SECRET`, local `BETTER_AUTH_URL`, `RESEND_API_KEY`, `MAILGUN_API_KEY`, local email overrides. |
+| Wrangler secrets | Deployed secret values managed by Cloudflare, not committed to git. | `BETTER_AUTH_SECRET`, `RESEND_API_KEY`, `MAILGUN_API_KEY`. |
+
+This separation of concerns keeps editable source policy in `src/config`, runtime
+environment selection in Wrangler config, and secret material outside committed
+files.
+
+## Source Config
+
+Use `src/config` when changing values that the app code should import directly:
+
+- `src/config/app.ts`: app identity and default navigation paths.
+- `src/config/auth.ts`: middleware route policy, admin route policy, app roles,
+  app permission values, and banned-session copy.
+
+Database target constants stay with `src/db/target.ts`. Email provider names and
+fallback behavior stay with `src/email`. Do not put environment secrets here. Do
+not move database schema here; schema belongs in `src/db/schema`.
+
+## Worker Runtime Config
+
+Use `wrangler.jsonc` for non-secret values the Worker reads from `env`:
 
 ```jsonc
 {
   "vars": {
-    "APP_NAME": "VK",
-    "DATABASE_TARGET": "d1",
-    "EMAIL_PROVIDER": "console",
-    "BETTER_AUTH_URL": "https://example.com",
-    "EMAIL_FROM": "VK <noreply@example.com>",
-    "EMAIL_REPLY_TO": "support@example.com",
-    "MAILGUN_DOMAIN": "mg.example.com",
-  },
+    "EMAIL_PROVIDER": "console"
+  }
 }
 ```
 
-Typical non-secret values include:
+Named Wrangler environments need their own `vars` block because Wrangler does
+not inherit top-level vars into environments.
 
-- `APP_NAME`
-- `DATABASE_TARGET`
-- `EMAIL_PROVIDER`
-- `EMAIL_FROM`
-- `EMAIL_REPLY_TO`
-- `BETTER_AUTH_URL`
-- `MAILGUN_DOMAIN`
+## Local And Deployed Secrets
 
-Do not put secret values in `wrangler.jsonc`.
-
-If you use named Wrangler environments, define the `vars` block inside each
-environment because Wrangler does not inherit `vars` from the top level.
-
-## Local Secrets
-
-Copy the local example and fill in values:
+Use `.dev.vars` for local development secrets:
 
 ```bash
-cp .dev.vars.example .dev.vars
-```
-
-Use `.dev.vars` for local-only secrets such as `BETTER_AUTH_SECRET`, email API
-keys, and local callback URLs. You can also use it for local-only overrides of
-non-secret values from `wrangler.jsonc`.
-
-```bash
-BETTER_AUTH_SECRET=your-local-secret
+BETTER_AUTH_SECRET=replace-with-at-least-32-random-characters
 BETTER_AUTH_URL=http://localhost:4321
 RESEND_API_KEY=your-local-resend-key
-MAILGUN_API_KEY=your-local-mailgun-key
-MAILGUN_DOMAIN=mg.example.com
 ```
 
-Do not commit `.dev.vars`.
-
-## Deployed Secrets
-
-Set deployed secrets with Wrangler. Better Auth always needs a stable secret:
+Use Wrangler secrets for deployed secrets:
 
 ```bash
 npx wrangler secret put BETTER_AUTH_SECRET
-```
-
-Set provider-specific email secrets only when the selected provider needs them:
-
-```bash
 npx wrangler secret put RESEND_API_KEY
 npx wrangler secret put MAILGUN_API_KEY
 ```
 
-Wrangler prompts for each value. Do not pass secret values as command arguments,
-print them in shell history, or commit them to `wrangler.jsonc`.
-
-If you deploy with a named Wrangler environment, pass the environment name when
-setting the secret:
-
-```bash
-npx wrangler secret put BETTER_AUTH_SECRET --env production
-```
-
-List configured secret names when auditing an environment:
-
-```bash
-npx wrangler secret list
-npx wrangler secret list --env production
-```
-
-## Provider Defaults
-
-The default email provider is `console`, which logs auth emails in local
-development and tests. Configure `EMAIL_PROVIDER`, `EMAIL_FROM`, and any
-provider-specific values before expecting real email delivery.
-
-The default database target is `d1`. D1 is the only supported runtime database;
-PostgreSQL and MySQL remain proof targets only.
+Only configure provider-specific secrets for the email provider the environment
+actually uses.

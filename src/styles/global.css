@@ -1,1 +1,23 @@
 @import "tailwindcss";
+@import "basecoat-css/base";
+@import "basecoat-css/styles/vega";
+
+.landing-actions .btn {
+  gap: 0.5rem;
+  padding-inline: 0.8rem;
+  /* Basecoat uses transition-all, which animates padding when styles settle on load. */
+  transition-property: color, background-color, border-color, box-shadow, opacity,
+    transform, filter;
+}
+
+.landing-actions .btn[data-variant="outline"] {
+  background-color: transparent;
+  border-color: oklch(0.269 0 0);
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .landing-actions .btn[data-variant="outline"]:hover {
+    background-color: oklch(0.269 0 0 / 0.08);
+  }
+}

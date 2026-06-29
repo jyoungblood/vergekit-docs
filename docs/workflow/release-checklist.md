@@ -14,7 +14,7 @@ npm run verify
 This runs Astro and TypeScript checks, linting, tests, and the production build.
 Run `npm run build` separately when investigating adapter or bundling issues.
 
-## Runtime Configuration
+## Configuration
 
 - Confirm `wrangler.jsonc` contains the production D1 `database_id`.
 - Confirm non-secret production values are in `wrangler.jsonc` or the named
@@ -58,7 +58,8 @@ Apply remote D1 migrations:
 npm run db:migrate:remote
 ```
 
-If this is the first production deploy, create a verified remote admin user:
+If this is the first production deploy, create a verified remote user with the
+`admin` role:
 
 ```bash
 npm run init:admin -- --remote

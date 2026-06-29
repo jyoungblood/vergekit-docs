@@ -1,12 +1,12 @@
-# Initial Admin User
+# Initial Admin
 
 Use `npm run init:admin` after D1 migrations when the app needs its first
-verified Better Auth user.
+verified Better Auth user with the `admin` role.
 
 The script prompts for a name, email address, and password. It hashes the
-password with Better Auth, inserts the user and credential account records, and
-writes directly to D1 through Wrangler. The Astro dev server does not need to be
-running.
+password with Better Auth, inserts the user and credential account records,
+assigns the `admin` role, and writes directly to D1 through Wrangler. The Astro
+dev server does not need to be running.
 
 ## Local Admin
 
@@ -16,7 +16,7 @@ Apply local migrations first:
 npm run db:migrate:local
 ```
 
-Create a verified local admin user:
+Create a verified local user with the `admin` role:
 
 ```bash
 npm run init:admin
@@ -37,7 +37,7 @@ Apply remote migrations first:
 npm run db:migrate:remote
 ```
 
-Create a verified remote admin user:
+Create a verified remote user with the `admin` role:
 
 ```bash
 npm run init:admin -- --remote

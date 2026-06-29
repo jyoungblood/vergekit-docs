@@ -6,13 +6,12 @@ Workers.
 
 ## 1. Configure
 
-Use `wrangler.jsonc` for committed non-secret Worker values:
+Use `src/config` for source-level app defaults and auth policy. Use
+`wrangler.jsonc` for committed non-secret Worker runtime values:
 
 ```jsonc
 {
   "vars": {
-    "APP_NAME": "VK",
-    "DATABASE_TARGET": "d1",
     "EMAIL_PROVIDER": "console",
   },
 }
@@ -44,7 +43,8 @@ npm run db:migrate:local
 
 ## 3. Initialize
 
-Create a verified local admin user when the app needs an initial login:
+Create a verified local user with the `admin` role when the app needs an initial
+login:
 
 ```bash
 npm run init:admin
@@ -85,5 +85,5 @@ npm run build
 ## 6. Deploy
 
 For production, create the remote D1 database, set deployed secrets, apply remote
-migrations, optionally create a remote admin user, then deploy with Wrangler or
-CI.
+migrations, optionally create a remote user with the `admin` role, then deploy
+through the project Cloudflare workflow.
