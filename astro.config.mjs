@@ -17,8 +17,12 @@ export default defineConfig({
         Head: './src/components/DocsHead.astro'
       },
       site: {
-        title: 'VergeKit Docs',
+        title: 'Verge Kit Docs',
+        subtitle: 'v0.1.1',
         description: 'Documentation for VergeKit.',
+        logo: {
+          url: '/vk-crane-a-white.svg',
+        },
         assets: {
           favicon: '/favicon.svg'
         }

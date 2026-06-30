@@ -64,19 +64,3 @@ src/
   middleware.ts  auth locals and route protection
 ```
 
-## Not Included Yet
-
-- Admin UI.
-- Full RBAC admin UI.
-- Uploads and storage adapters.
-- Media processing.
-- Production PostgreSQL or MySQL runtime support.
-
-## Database Status
-
-D1 is the only supported runtime database. Runtime code should use the local
-`src/db` modules rather than importing `drizzle-orm/d1` directly from routes,
-actions, middleware, or UI code.
-
-The project has proof tests for future Hyperdrive PostgreSQL and MySQL support.
-Those targets are not enabled at runtime.

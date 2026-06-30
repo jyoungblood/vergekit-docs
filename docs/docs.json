@@ -41,12 +41,6 @@
           "attrs": { "data-astro-prefetch": true }
         },
         {
-          "slug": "setup/hyperdrive-proof",
-          "label": "Hyperdrive Proof",
-          "icon": "database",
-          "attrs": { "data-astro-prefetch": true }
-        },
-        {
           "slug": "setup/auth-routes",
           "label": "Route Authentication",
           "icon": "shield-check",
