@@ -14,7 +14,8 @@ export default defineConfig({
       style: 'vega',
       css: false,
       components: {
-        Head: './src/components/DocsHead.astro'
+        Head: './src/components/DocsHead.astro',
+        ContentHeader: './src/components/ContentHeader.astro',
       },
       site: {
         title: 'Verge Kit Docs',
